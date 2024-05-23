@@ -1,6 +1,7 @@
 package projetovetor;
 
 public class Vetor {
+
     private Double x;
     private Double y;
     private Double z;
@@ -61,6 +62,11 @@ public class Vetor {
         double y = v1.z * v2.x - v1.x * v2.z;
         double z = v1.x * v2.y - v1.y * v2.x;
         return new Vetor(x, y, z);
+    }
+
+    public static Vetor calcularVetorOrtogonal(Vetor v1, Vetor v2) {
+
+        return new Vetor(-v2.y, v1.x, 0.0);
     }
 
     @Override
