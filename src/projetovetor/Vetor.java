@@ -1,26 +1,27 @@
 package projetovetor;
 
 public class Vetor {
-
     private Double x;
     private Double y;
     private Double z;
+    private boolean is2D;
 
-    // Construtor para vetores 2D
+    // Construtor para vetor 2D
     public Vetor(Double x, Double y) {
         this.x = x;
         this.y = y;
-        this.z = null; // Define z como null para vetores 2D
+        this.z = 0.0;
+        this.is2D = true; // Define como 2D
     }
 
-    // Construtor para vetores 3D
+    // Construtor para vetor 3D
     public Vetor(Double x, Double y, Double z) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.is2D = false; // Define como 3D
     }
 
-    // Getters para as coordenadas
     public Double getX() {
         return x;
     }
@@ -31,6 +32,10 @@ public class Vetor {
 
     public Double getZ() {
         return z;
+    }
+
+    public boolean is2D() {
+        return is2D;
     }
 
     // Calcula a magnitude do vetor
@@ -52,25 +57,15 @@ public class Vetor {
 
     // Calcula o produto vetorial entre dois vetores
     public static Vetor calcularProdutoVetorial(Vetor v1, Vetor v2) {
-        if (v1.z == null) {
-            v1.z = 0.0;
-        }
-        if (v2.z == null) {
-            v2.z = 0.0;
-        }
         double x = v1.y * v2.z - v1.z * v2.y;
         double y = v1.z * v2.x - v1.x * v2.z;
         double z = v1.x * v2.y - v1.y * v2.x;
         return new Vetor(x, y, z);
     }
 
-    // Formatação da string de saída para vetores
     @Override
     public String toString() {
-        if (z == null) {
-            return "(" + x + ", " + y + ")";
-        } else {
-            return "(" + x + ", " + y + ", " + z + ")";
-        }
+        // Formata a saída dependendo do tipo de vetor (2D ou 3D)
+        return is2D ? String.format("(%.1f, %.1f)", x, y) : String.format("(%.1f, %.1f, %.1f)", x, y, z);
     }
 }

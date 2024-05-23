@@ -36,7 +36,7 @@ public class VetorApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Fundamentos Matemáticos - SENAI FATESG");
+        primaryStage.setTitle("Simulador de Vetores - SENAI FATESG");
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 600, 400);
 
@@ -82,6 +82,7 @@ public class VetorApp extends Application {
                 criarMenuItem("Magnitude", () -> calcularUnicoVetor(dimension, this::calcularMagnitude)),
                 criarMenuItem("Produto Escalar", () -> calcularDoisVetores(dimension, this::calcularProdutoEscalar)),
                 criarMenuItem("Ângulo", () -> calcularDoisVetores(dimension, this::calcularAngulo)),
+                criarMenuItem("Vetor Ortogonal", () -> calcularDoisVetores(dimension, this::calcularProdutoVetorial)),
                 criarMenuItem("Produto Vetorial", () -> calcularDoisVetores(dimension, this::calcularProdutoVetorial))
         );
         return menu;
@@ -129,7 +130,7 @@ public class VetorApp extends Application {
                 Double x = Double.parseDouble(xField.getText());
                 Double y = Double.parseDouble(yField.getText());
                 Double z = zField.getText().isEmpty() ? null : Double.parseDouble(zField.getText());
-                return new Vetor(x, y, z);
+                return z == null ? new Vetor(x, y) : new Vetor(x, y, z);
             }
             return null;
         });
@@ -229,7 +230,7 @@ public class VetorApp extends Application {
     private List<Vetor> getVetoresByDimension(int dimension) {
         List<Vetor> filteredList = new ArrayList<>();
         for (Vetor vetor : vetores) {
-            if ((dimension == 2 && vetor.getZ() == null) || (dimension == 3 && vetor.getZ() != null)) {
+            if ((dimension == 2 && vetor.is2D()) || (dimension == 3 && !vetor.is2D())) {
                 filteredList.add(vetor);
             }
         }
