@@ -112,12 +112,9 @@ public class VetorApp extends Application {
         dialog.setHeaderText("Insira as coordenadas do vetor:");
 
         VBox vbox = new VBox();
-        TextField xField = new TextField();
-        xField.setPromptText("X");
-        TextField yField = new TextField();
-        yField.setPromptText("Y");
-        TextField zField = new TextField();
-        zField.setPromptText("Z (opcional)");
+        TextField xField = criarTextFieldNumerico("X");
+        TextField yField = criarTextFieldNumerico("Y");
+        TextField zField = criarTextFieldNumerico("Z (opcional)");
 
         vbox.getChildren().addAll(new Label("X:"), xField, new Label("Y:"), yField, new Label("Z:"), zField);
         dialog.getDialogPane().setContent(vbox);
@@ -127,14 +124,34 @@ public class VetorApp extends Application {
 
         dialog.setResultConverter(b -> {
             if (b == buttonTypeOk) {
-                Double x = Double.parseDouble(xField.getText());
-                Double y = Double.parseDouble(yField.getText());
-                Double z = zField.getText().isEmpty() ? null : Double.parseDouble(zField.getText());
-                return z == null ? new Vetor(x, y) : new Vetor(x, y, z);
+                try {
+                    Double x = Double.parseDouble(xField.getText());
+                    Double y = Double.parseDouble(yField.getText());
+                    Double z = zField.getText().isEmpty() ? null : Double.parseDouble(zField.getText());
+                    return z == null ? new Vetor(x, y) : new Vetor(x, y, z);
+                } catch (NumberFormatException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro de Formato");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Por favor, insira um número válido.");
+                    alert.showAndWait();
+                }
             }
             return null;
         });
         return dialog;
+    }
+
+    // Cria um TextField que permite apenas a inserção de números (incluindo decimais)
+    private TextField criarTextFieldNumerico(String promptText) {
+        TextField textField = new TextField();
+        textField.setPromptText(promptText);
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("-?\\d*(\\.\\d*)?")) {
+                textField.setText(oldValue);
+            }
+        });
+        return textField;
     }
 
     // Visualiza e remove vetores da lista
@@ -157,7 +174,7 @@ public class VetorApp extends Application {
         dialog.setHeaderText("Selecione um vetor para calcular:");
         dialog.setContentText("Vetores:");
 
-        // Altera o texto do botão para "Calcular"
+        // Botão "Calcular"
         ButtonType buttonTypeCalcular = new ButtonType("Calcular", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().setAll(buttonTypeCalcular, ButtonType.CANCEL);
 
@@ -199,7 +216,7 @@ public class VetorApp extends Application {
         VBox vBox = new VBox(10, new Label("Selecione o primeiro vetor:"), comboBoxVetores1, new Label("Selecione o segundo vetor:"), comboBoxVetores2);
         dialog.getDialogPane().setContent(vBox);
 
-        // Altera o texto do botão para "Calcular"
+        // Botão para "Calcular"
         ButtonType buttonTypeCalcular = new ButtonType("Calcular", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(buttonTypeCalcular, ButtonType.CANCEL);
 
